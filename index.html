@@ -3,414 +3,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For Song DoungChan</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Happy Birthday Song DoungChan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300;500;700&family=Great+Vibes&display=swap" rel="stylesheet">
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap');
         :root {
-            --primary: #ec4899; /* Pink */
-            --secondary: #8b5cf6; /* Violet */
-            --dark: #0f172a;
+            --bg-dark: #0f172a;
+            --bg-gradient: radial-gradient(circle at center, #2e1a47 0%, #0f172a 100%);
+            --gold: #ffd700;
+            --rose: #ff9a9e;
             --glass: rgba(255, 255, 255, 0.1);
-            --neon-glow: 0 0 20px rgba(236, 72, 153, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #f8fafc;
+            font-family: 'Quicksand', 'Battambang', sans-serif;
         }
+
+        * { box-sizing: border-box; }
 
         body {
+            font-family: 'Quicksand', 'Battambang', sans-serif;
             margin: 0; padding: 0;
             height: 100vh; overflow: hidden;
-            background: radial-gradient(circle at top, #2e1065, #0f172a);
-            font-family: 'Outfit', sans-serif;
-            color: white;
-            display: flex; justify-content: center; align-items: center;
+            background: var(--bg-gradient);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-light);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        /* --- BACKGROUND PARTICLES --- */
-        #snow-canvas {
+        /* --- BACKGROUND EFFECTS (Snow & Balloons) --- */
+        .effect-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
         }
 
-        /* --- SCENE 1: THE INTRO (Modern Tree) --- */
-        #intro-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 100;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            transition: opacity 1s ease;
+        /* Snow */
+        .snowflake {
+            position: absolute; color: #fff; opacity: 0.8;
+            animation: fall linear infinite;
         }
-
-        .neon-tree {
-            position: relative; cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .neon-tree:hover { transform: scale(1.05); }
-
-        /* Abstract Geometric Tree */
-        .triangle {
-            width: 0; height: 0;
-            border-left: 60px solid transparent;
-            border-right: 60px solid transparent;
-            border-bottom: 80px solid rgba(255, 255, 255, 0.1);
-            margin: -30px auto;
-            position: relative;
-            filter: drop-shadow(0 0 15px var(--secondary));
-            animation: pulseTree 3s infinite alternate;
-        }
-        .triangle::after {
-            content: ''; position: absolute;
-            top: 80px; left: -60px;
-            width: 0; height: 0;
-            border-left: 60px solid transparent;
-            border-right: 60px solid transparent;
-            border-bottom: 80px solid transparent;
-            border-bottom-color: rgba(139, 92, 246, 0.5); /* Inner Color */
-            transform: scale(0.8); transform-origin: center bottom;
-        }
-        
-        .triangle:nth-child(1) { border-bottom-color: rgba(236, 72, 153, 0.8); z-index: 3; }
-        .triangle:nth-child(2) { border-bottom-width: 100px; border-left-width: 70px; border-right-width: 70px; z-index: 2; animation-delay: 0.5s; }
-        .triangle:nth-child(3) { border-bottom-width: 120px; border-left-width: 80px; border-right-width: 80px; z-index: 1; animation-delay: 1s; }
-
-        @keyframes pulseTree { 
-            0% { filter: drop-shadow(0 0 5px var(--primary)); } 
-            100% { filter: drop-shadow(0 0 25px var(--secondary)); } 
-        }
-
-        .click-hint {
-            margin-top: 50px;
-            font-size: 1.2rem; letter-spacing: 2px;
-            background: linear-gradient(90deg, #ec4899, #8b5cf6);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: bounce 2s infinite;
-        }
-
-        /* --- SCENE 2: MAIN STAGE --- */
-        .stage {
-            position: relative; z-index: 10;
-            perspective: 1000px;
-            opacity: 0; transition: opacity 1s;
-        }
-
-        /* 3D Modern Gift Box */
-        .box-container {
-            width: 200px; height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-        
-        .box-face {
-            position: absolute; width: 200px; height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(5px);
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: inset 0 0 20px rgba(236, 72, 153, 0.2);
-        }
-        .front { transform: translateZ(100px); }
-        .back { transform: translateZ(-100px) rotateY(180deg); }
-        .right { transform: rotateY(90deg) translateZ(100px); }
-        .left { transform: rotateY(-90deg) translateZ(100px); }
-        .top { transform: rotateX(90deg) translateZ(100px); background: #ec4899; }
-        .bottom { transform: rotateX(-90deg) translateZ(100px); }
-
-        .ribbon-wrap {
-            position: absolute; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            transform: translateZ(101px);
-        }
-        .ribbon { width: 40px; height: 200px; background: linear-gradient(to bottom, #f472b6, #db2777); }
-        .ribbon-h { width: 200px; height: 40px; background: linear-gradient(to right, #f472b6, #db2777); position: absolute; }
-
-        /* Floating Icons (Personality Traits) */
-        .trait-icon {
-            position: absolute; color: white; font-size: 2rem;
-            opacity: 0;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-
-        /* The Cake (Neon Style) */
-        .cake-container {
-            position: absolute; bottom: 0; left: 50%;
-            transform: translateX(-50%) translateY(200px) scale(0.5);
-            width: 200px; height: 200px;
-            z-index: 5; opacity: 0;
-            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .cake-base {
-            width: 100%; height: 100px;
-            background: linear-gradient(135deg, #4c1d95, #2e1065);
-            border-radius: 10px;
-            position: absolute; bottom: 0;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
-            border-top: 5px solid #a78bfa;
-        }
-        .cake-top {
-            width: 80%; height: 60px;
-            background: linear-gradient(135deg, #be185d, #831843);
-            border-radius: 10px;
-            position: absolute; bottom: 100px; left: 10%;
-            border-top: 5px solid #f472b6;
-        }
-        .candle-modern {
-            width: 8px; height: 40px; background: white;
-            position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
-            box-shadow: 0 0 10px white;
-        }
-        .flame-modern {
-            width: 15px; height: 20px; background: #fbbf24;
-            border-radius: 50%; position: absolute; top: -20px; left: -3.5px;
-            animation: flicker 0.2s infinite alternate;
-            box-shadow: 0 0 20px #fbbf24;
+        @keyframes fall {
+            to { transform: translateY(105vh); }
         }
 
         /* Balloons */
         .balloon {
-            position: absolute; width: 50px; height: 70px;
-            background: rgba(255,255,255,0.2);
+            position: absolute; bottom: -150px;
+            width: 40px; height: 50px;
+            background: var(--rose);
             border-radius: 50%;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.4);
-            bottom: -100px;
-            animation: floatUp 6s ease-in forwards;
+            opacity: 0.8;
+            animation: floatUp ease-in-out infinite;
         }
-        @keyframes floatUp { to { bottom: 120vh; } }
+        .balloon::before {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 40px; background: rgba(255,255,255,0.5);
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.9; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
 
-        /* --- ANIMATIONS --- */
-        .shake-box { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-
-        .open-lid { transform: rotateX(120deg) translateZ(100px) translateY(-100px) !important; opacity: 0; transition: 0.5s; }
-        
-        /* --- CUSTOM ALERT MODAL --- */
-        .custom-modal {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
-            width: 80%; max-width: 400px;
+        /* --- 1. INTRO OVERLAY --- */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
             z-index: 2000;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s ease;
         }
-        .modal-show { transform: translate(-50%, -50%) scale(1); }
-        .modal-title { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #f472b6; margin: 0; }
-        .modal-body { color: #cbd5e1; margin: 15px 0; font-size: 1.1rem; line-height: 1.6; }
+
+        .intro-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 90%;
+        }
+
+        .btn-start {
+            padding: 15px 40px;
+            font-family: 'Great Vibes', 'Cinzel', 'Battambang', cursive; 
+            font-weight: 700; font-size: 1.1rem;
+            color: var(--gold); border: 2px solid var(--gold);
+            background: transparent; border-radius: 50px;
+            cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+
+        }
+        .btn-start:hover {
+            background: var(--gold); color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        #loading-text {
+            margin-top: 20px; font-family: 'Cinzel', serif; font-size: 1.5rem;
+            color: var(--rose); min-height: 50px; display: none;
+            text-shadow: 0 0 10px rgba(255, 154, 158, 0.4);
+            animation: pulse 1.5s infinite;
+            
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+        /* --- 2. MAIN STAGE --- */
+        .stage {
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%;
+        }
+
+        #final-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3rem, 8vw, 5rem); /* Responsive Font Size */
+            margin: 0 0 40px 0;
+            background: linear-gradient(to right, #fff, var(--gold));
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0; transform: translateY(30px);
+            transition: all 1.5s ease;
+            text-align: center;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        }
+
+        /* --- RESPONSIVE CAKE --- */
+        .cake-wrapper {
+            position: relative;
+            width: 250px; height: 250px;
+            display: flex; justify-content: center; align-items: flex-end;
+            opacity: 0; transform: translateY(50px);
+            transition: all 1s ease 0.5s;
+        }
+
+        .cake-layer {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            border-radius: 50% 50% 10% 10% / 20% 20% 10% 10%;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Icing Drips */
+        .cake-layer::before {
+            content: ''; position: absolute; top: -5px; left: 0; width: 100%; height: 15px;
+            background: #fff; border-radius: 10px; opacity: 0.9;
+        }
+
+        .layer-1 { width: 220px; height: 70px; bottom: 0; background: linear-gradient(135deg, #6a11cb, #2575fc); z-index: 1; }
+        .layer-2 { width: 170px; height: 60px; bottom: 50px; background: linear-gradient(135deg, #fad0c4, #ffd1ff); z-index: 2; }
+        .layer-3 { width: 120px; height: 50px; bottom: 95px; background: linear-gradient(135deg, #ff9a9e, #fecfef); z-index: 3; }
+
+        .candle-container {
+            position: absolute; bottom: 135px; width: 100%; display: flex; justify-content: center; gap: 15px; z-index: 4;
+        }
+        .candle {
+            width: 10px; height: 35px; background: #fff; border-radius: 3px; position: relative;
+        }
+        .flame {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 12px; height: 18px;
+            background: radial-gradient(circle, #ffd700, #ff4500);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.5s infinite alternate;
+        }
+        @keyframes flicker { to { transform: translateX(-50%) scale(1.1); } }
+
+        /* --- 3. UI/UX MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 3000;
+            opacity: 0; pointer-events: none; transition: opacity 0.6s ease;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+        }
+        
+        .modal-card {
+            background: rgba(30, 41, 59, 0.85); /* Dark Glass */
+            border: 1px solid var(--gold);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px; width: 100%;
+            transform: scale(0.8); transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Modal Shine Effect */
+        .modal-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg); pointer-events: none;
+        }
+
+        .modal-icon { font-size: 3rem; color: var(--gold); margin-bottom: 15px; }
+        
+        .modal-title {
+            font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; margin-bottom: 10px;
+        }
+        
+        .modal-text {
+            font-size: 1.1rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 25px;
+        }
+
         .modal-btn {
-            background: linear-gradient(90deg, #ec4899, #8b5cf6);
-            border: none; padding: 10px 30px; border-radius: 30px;
-            color: white; font-weight: bold; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
+            background: var(--gold); color: var(--bg-dark);
+            border: none; padding: 12px 30px; border-radius: 30px;
+            font-weight: 700; cursor: pointer; font-size: 1rem;
             transition: transform 0.2s;
+            font-family: 'Quicksand', 'Battambang', sans-serif;
         }
         .modal-btn:hover { transform: scale(1.05); }
+
+        /* --- TRIGGERED STATES --- */
+        body.triggered #final-title { opacity: 1; transform: translateY(0); }
+        body.triggered .cake-wrapper { opacity: 1; transform: translateY(0); }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-overlay.show .modal-card { transform: scale(1); }
 
     </style>
 </head>
 <body>
 
-    <audio id="song1" src="mistletoe.mp3"></audio>
-    <audio id="song2" src="khmersong.mp3"></audio>
+    <audio id="song1" src="mistletoe.mp3" preload="auto"></audio>
+    <audio id="song2" src="khmersong.mp3" preload="auto"></audio>
 
-    <canvas id="snow-canvas"></canvas>
+    <div class="effect-layer" id="snow-layer"></div>
+    <div class="effect-layer" id="balloon-layer"></div>
 
-    <div id="intro-layer">
-        <div class="neon-tree" id="start-btn">
-            <div class="triangle"></div>
-            <div class="triangle"></div>
-            <div class="triangle"></div>
+    <div id="overlay">
+        <div class="intro-card">
+            <button class="btn-start" id="start-btn">រីករាយថ្ងៃកំណើត</button>
+            <div id="loading-text"></div>
         </div>
+    </div>
+
+    <div class="stage">
+        <h1 id="final-title">Happy Birthday<br>Song DoungChan</h1>
         
-        <div class="text-center mt-8">
-            <h2 class="text-3xl font-light mb-2" style="font-family: 'Dancing Script'; color: #e2e8f0;">A Moment For</h2>
-            <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
-                Song DoungChan
-            </h1>
-            <div class="click-hint">Tap the Tree</div>
-        </div>
-
-        <div id="traits-container"></div>
-    </div>
-
-    <div class="stage" id="main-stage">
-        <div class="box-container" id="gift-box">
-            <div class="box-face front"><div class="ribbon"></div></div>
-            <div class="box-face back"></div>
-            <div class="box-face right"></div>
-            <div class="box-face left"></div>
-            <div class="box-face top"><div class="ribbon"></div><div class="ribbon-h"></div></div>
-            <div class="box-face bottom"></div>
-        </div>
-
-        <div class="cake-container" id="cake">
-            <div class="cake-base"></div>
-            <div class="cake-top"></div>
-            <div class="candle-modern"><div class="flame-modern"></div></div>
+        <div class="cake-wrapper">
+            <div class="cake-layer layer-1"></div>
+            <div class="cake-layer layer-2"></div>
+            <div class="cake-layer layer-3"></div>
+            <div class="candle-container">
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+            </div>
         </div>
     </div>
 
-    <div class="custom-modal" id="bday-modal">
-        <h2 class="modal-title">Happy Birthday! 🎂</h2>
-        <div class="modal-body">
-            <strong>Song DoungChan</strong><br>
-            To the strongest, hardest working, and friendliest soul.<br>
-            May your year be as bright as your spirit.
+    <div class="modal-overlay" id="modal">
+        <div class="modal-card">
+            <div class="modal-icon"><i class="fas fa-cake"></i></div>
+            <h2 class="modal-title">To Song DoungChan</h2>
+            <p class="modal-text">
+                Beauty catches the eye, but intelligence captures the heart.<br><br>
+                Today I celebrate not just your birthday, but your brilliant mind, your elegance, and the amazing future ahead of you.<br><br>
+                May you continue to shine brighter every year.
+            </p>
+            <button class="modal-btn" id="close-modal">សុំលុយចាយ</button>
         </div>
-        <button class="modal-btn" onclick="closeModal()">Make a Wish ✨</button>
     </div>
 
     <script>
-        // --- SETUP ---
-        const intro = document.getElementById('intro-layer');
+        // --- CONFIGURATION ---
+        const smartCompliments = [
+            "Kom plex...",
+            "Nham bay...",
+            "Nham terk...",
+            "Nham sach...",
+            "HDB, Song DoungChan."
+        ];
+
+        // --- ELEMENTS ---
         const startBtn = document.getElementById('start-btn');
-        const stage = document.getElementById('main-stage');
-        const box = document.getElementById('gift-box');
-        const cake = document.getElementById('cake');
-        const modal = document.getElementById('bday-modal');
+        const overlay = document.getElementById('overlay');
+        const loadingText = document.getElementById('loading-text');
         const audio1 = document.getElementById('song1');
         const audio2 = document.getElementById('song2');
+        const modal = document.getElementById('modal');
+        const snowLayer = document.getElementById('snow-layer');
+        const balloonLayer = document.getElementById('balloon-layer');
 
-        // --- SNOW CANVAS LOGIC ---
-        const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particles = [];
-        for(let i=0; i<100; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 3 + 1,
-                d: Math.random() * 10 + 2
-            });
-        }
-
-        function drawSnow() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
-            ctx.beginPath();
-            for(let i=0; i<particles.length; i++) {
-                const p = particles[i];
-                ctx.moveTo(p.x, p.y);
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
-            }
-            ctx.fill();
-            updateSnow();
-            requestAnimationFrame(drawSnow);
-        }
-
-        function updateSnow() {
-            for(let i=0; i<particles.length; i++) {
-                const p = particles[i];
-                p.y += p.d * 0.1; // Speed
-                if(p.y > canvas.height) p.y = 0;
+        // --- INIT EFFECTS ---
+        function createSnow() {
+            const count = 50;
+            for(let i=0; i<count; i++) {
+                const flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerHTML = '❄';
+                flake.style.left = Math.random() * 100 + '%';
+                flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                flake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                flake.style.animationDelay = (Math.random() * 5) + 's';
+                snowLayer.appendChild(flake);
             }
         }
-        drawSnow();
-
-        // --- TRAITS ANIMATION (Hard Working, Friendly, Strong) ---
-        function showTraits() {
-            const traits = [
-                { icon: 'fa-briefcase', text: 'Hard Working', color: '#60a5fa', top: '20%', left: '20%' },
-                { icon: 'fa-heart', text: 'Friendly', color: '#f472b6', top: '30%', left: '70%' },
-                { icon: 'fa-gem', text: 'Strong Girl', color: '#a78bfa', top: '60%', left: '50%' }
-            ];
-
-            const container = document.getElementById('traits-container');
-            
-            traits.forEach((t, index) => {
-                const el = document.createElement('div');
-                el.className = 'trait-icon';
-                el.innerHTML = `<i class="fas ${t.icon}"></i>`;
-                el.style.color = t.color;
-                el.style.top = t.top;
-                el.style.left = t.left;
-                el.style.position = 'absolute';
-                el.style.transition = 'all 1s ease';
-                container.appendChild(el);
-
-                // Animate in
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'scale(1.5)';
-                }, index * 800);
-            });
-        }
-
-        // --- FLOW SEQUENCE ---
-        startBtn.addEventListener('click', () => {
-            // 1. Play Intro Music
-            audio1.volume = 0.5;
-            audio1.play().catch(e=>console.log("Audio Policy"));
-            
-            // 2. Hide Hint, Show Traits
-            document.querySelector('.click-hint').style.display = 'none';
-            showTraits();
-
-            // 3. Transition after 4 seconds
-            setTimeout(() => {
-                intro.style.opacity = '0';
-                setTimeout(() => intro.style.display = 'none', 1000);
-                
-                stage.style.opacity = '1';
-                // Trigger Box Shake
-                box.classList.add('shake-box');
-            }, 4000);
-        });
-
-        // --- OPEN GIFT ---
-        box.addEventListener('click', () => {
-            box.classList.remove('shake-box');
-            
-            // 1. Switch Audio
-            let vol = 0.5;
-            const fade = setInterval(() => {
-                if(vol > 0.05) { vol -= 0.05; audio1.volume = vol; }
-                else {
-                    clearInterval(fade); audio1.pause();
-                    audio2.currentTime = 0; audio2.volume = 1; audio2.play();
-                }
-            }, 100);
-
-            // 2. Open Animation
-            document.querySelector('.top').classList.add('open-lid');
-            
-            // 3. Show Cake
-            cake.style.opacity = '1';
-            cake.style.transform = "translateX(-50%) translateY(-50px) scale(1)";
-
-            // 4. Release Balloons
-            createBalloons();
-
-            // 5. Show Modal after delay
-            setTimeout(() => {
-                modal.classList.add('modal-show');
-            }, 2000);
-        });
 
         function createBalloons() {
-            const colors = ['rgba(236, 72, 153, 0.6)', 'rgba(139, 92, 246, 0.6)', 'rgba(59, 130, 246, 0.6)'];
+            const colors = ['#ffd700', '#ff9a9e', '#ffffff', '#a18cd1'];
             for(let i=0; i<15; i++) {
                 const b = document.createElement('div');
                 b.className = 'balloon';
-                b.style.left = Math.random() * 80 + 10 + '%';
-                b.style.background = colors[Math.floor(Math.random()*3)];
-                b.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                document.body.appendChild(b);
+                b.style.left = Math.random() * 100 + '%';
+                b.style.background = colors[Math.floor(Math.random() * colors.length)];
+                b.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                b.style.animationDelay = (Math.random() * 5) + 's';
+                balloonLayer.appendChild(b);
             }
         }
 
-        function closeModal() {
-            modal.classList.remove('modal-show');
-            // Fireworks or sparkle effect could be added here
-            alert("Wishing you the best year ahead! ✨");
+        createSnow();
+
+        // --- INTERACTION ---
+        startBtn.addEventListener('click', () => {
+            // 1. UI Changes
+            startBtn.style.display = 'none';
+            loadingText.style.display = 'block';
+
+            // 2. Play Audio 1
+            audio1.volume = 0.5;
+            audio1.play().catch(e => console.log("Audio play failed (interaction policy)"));
+
+            // 3. Cycle Text
+            let step = 0;
+            loadingText.innerText = smartCompliments[0];
+            const interval = setInterval(() => {
+                step++;
+                if (step < smartCompliments.length) {
+                    loadingText.innerText = smartCompliments[step];
+                } else {
+                    clearInterval(interval);
+                    startMainEvent();
+                }
+            }, 1500); // 1.5s per text
+        });
+
+        function startMainEvent() {
+            // 1. Fade Audio
+            let vol = 0.5;
+            const fade = setInterval(() => {
+                if(vol > 0) {
+                    vol -= 0.1; audio1.volume = Math.max(0, vol);
+                } else {
+                    clearInterval(fade);
+                    audio1.pause();
+                    audio2.volume = 1.0;
+                    audio2.currentTime = 0;
+                    audio2.play();
+                }
+            }, 200);
+
+            // 2. Remove Overlay
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 1000);
+
+            // 3. Show Atmosphere
+            createBalloons();
+            document.body.classList.add('triggered');
+
+            // 4. Show Modal (Delay)
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 4000); // 4 seconds after reveal
         }
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+            modal.classList.remove('show');
+            // Optional: Trigger confetti burst here if you want extra flair
+        });
 
     </script>
 </body>
